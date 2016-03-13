@@ -1,0 +1,19 @@
+Jag har valt att implementera Closest Pair-algoritmen som använder sig av divide and conquer.
+
+Vad som krävs för att utföra closest pair är att den lista av punkter som ska bearbetas ska vara sorterad. dels efter x-värden, men även för y-värden. Därför har jag delat upp problemet i först metoden getClosestPair(List<Point>) som utifrån listparametern skapar två listor som sorteras efter dessa krav. Därefter används den faktiska algoritmen i den privata metoden closestPair(List<Point>, List<Point). 
+closestPair(List<Point>, List<Point>) tar två argment: xPoints som är listan med punkter sorterade efter x-värde och yPoints som är sorterade efter y.
+
+Det första som sker om parameter-listorna är större än tre till antalet element är att dela in dessa i två del-listor: Left och Right. Detta görs först genom att bara dela xPoints i mitten, där 0->N/2 blir left och N/2->N blir right. Därefter tas medianelmentet ur xPoints, yPoints delas upp efter om dess varje elements x-värde är större: right eller mindre: left än detta medianvärde.
+Nu är alltså listan av punkterna uppdelade i fyra delar utifrån elementens medianvärde med avseende på x-värdet: xLeft, xRight, yLeft, yRight. Nu kommer vidare de närmst liggande paren från dessa beräknas: först beräknas left-listorna: xLeft, yLeft och sedan right. Detta görs rekursivt med closestpair(List<Point>, List<Point>). När vi då fått tillbaka det närmst liggande värdena från de två delarna av vår lista jämför vi vilket som är närmast och sätter det till curDistMin samt closestPair. Nu har vi jämfört punkterna vänster om median och de höger om median separat. Kvar finns om det existerar ett ännu närmare par som ligger på varsin sida om medianen.
+
+Därför skapas en ny lista: midPoints som tilldelas alla de punkter ifrån yPoints vars x-värde är närmare medianen än det hitills närmst liggande pars avstånd: dMin. Detta eftersom om punkten ligger längre bort än curDistMin från medianen i x, kan den alltså omöjligt ha ett närmare liggande punkt på andra sidan medianen, och dess närmaste på sin sida har ju redan beräknats sedan tidigare. Vi tar dessa element från yPoints, eftersom vi då har punkterna i sorterad form i y-led, då behöver alltså endast första elementet jämföras med andra, och andra endast med tredje och så vidare. Andra elementet kommer alltså alltid att ligga närmre det första än vad det tredje gör.
+När vi har de punkter som ligger närmare än curDistMin tll medianen i x görs en bruteforceberäkning, som tidigare sagt jämförs element i med i+1, det vill säga de som ligger efter varandra i y-led jämförs med varandra. Om avståndet mellan dessa är kortare än curDistMin behöver det inte, men möjligheten finns att detta avstånd är ännu kortare än curDistMin. Om avståndet är kortare än curDistMin sätts curDistMin till detta nya, samt paret sätts till closestPair. När alla par har jämförs returneras de par som är sparat som closestPair
+
+Om closestPair(List<Point>,List<Point)s parameter xPoints har 3 eller färre antal element i listan returneras det par som är ligger varandra närmast, detta då en delning av denna lista skulle innebära att en dellista endast innehåller en punkt och då ändå inte kan jämföras. Jämförelsen görs med bruteforceteknik, alla kombinationer av punkterna testas för att bestämma vilket par som ligger närmast varandra.
+
+Då listan innehåller 3 eller färre element är alltså botten på metodens rekursion. Den rekursiva anropet där vänster- resp högerlistorna rekursivt anropas innebär att denna algoritm kommer jämföras alltså först dela orginallistan på två, finns det i dessa dellistor mer än 3 element så kommer dessa rekursivt delas på två och så vidare. Detta är vad som menas med att algoritmen är en så kallad divide and conquer-algoritm. Problemet(antalet punkter som behöver jämföras) görs mindre och mindre för att lättare kunna beräknas.
+
+
+Muntafrågor
+Varför är closestPair en divide and conquerteknik?
+Vad innebär backtracking?
